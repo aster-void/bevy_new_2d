@@ -1,6 +1,6 @@
 //! The screen state for the main gameplay.
 
-use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::Val::*};
+use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{Pause, demo::level::spawn_level, menus::Menu, screens::Screen};
 
@@ -42,13 +42,13 @@ fn spawn_pause_overlay(mut commands: Commands) {
     commands.spawn((
         Name::new("Pause Overlay"),
         Node {
-            width: Percent(100.0),
-            height: Percent(100.0),
+            width: percent(100),
+            height: percent(100),
             ..default()
         },
         GlobalZIndex(1),
         BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.8)),
-        StateScoped(Pause(true)),
+        DespawnOnExit(Pause(true)),
     ));
 }
 

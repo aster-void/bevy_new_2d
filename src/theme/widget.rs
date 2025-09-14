@@ -5,7 +5,6 @@ use std::borrow::Cow;
 use bevy::{
     ecs::{spawn::SpawnWith, system::IntoObserverSystem},
     prelude::*,
-    ui::Val::*,
 };
 
 use crate::theme::{interaction::InteractionPalette, palette::*};
@@ -16,12 +15,12 @@ pub fn ui_root(name: impl Into<Cow<'static, str>>) -> impl Bundle {
         Name::new(name),
         Node {
             position_type: PositionType::Absolute,
-            width: Percent(100.0),
-            height: Percent(100.0),
+            width: percent(100),
+            height: percent(100),
             align_items: AlignItems::Center,
             justify_content: JustifyContent::Center,
             flex_direction: FlexDirection::Column,
-            row_gap: Px(20.0),
+            row_gap: px(20),
             ..default()
         },
         // Don't block picking events for other UI roots.
@@ -52,7 +51,7 @@ pub fn label(text: impl Into<String>) -> impl Bundle {
 /// A large rounded button with text and an action defined as an [`Observer`].
 pub fn button<E, B, M, I>(text: impl Into<String>, action: I) -> impl Bundle
 where
-    E: Event,
+    E: EntityEvent,
     B: Bundle,
     I: IntoObserverSystem<E, B, M>,
 {
@@ -61,8 +60,8 @@ where
         action,
         (
             Node {
-                width: Px(380.0),
-                height: Px(80.0),
+                width: px(380),
+                height: px(80),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 ..default()
@@ -75,7 +74,7 @@ where
 /// A small square button with text and an action defined as an [`Observer`].
 pub fn button_small<E, B, M, I>(text: impl Into<String>, action: I) -> impl Bundle
 where
-    E: Event,
+    E: EntityEvent,
     B: Bundle,
     I: IntoObserverSystem<E, B, M>,
 {
@@ -83,8 +82,8 @@ where
         text,
         action,
         Node {
-            width: Px(30.0),
-            height: Px(30.0),
+            width: px(30),
+            height: px(30),
             align_items: AlignItems::Center,
             justify_content: JustifyContent::Center,
             ..default()
@@ -99,7 +98,7 @@ fn button_base<E, B, M, I>(
     button_bundle: impl Bundle,
 ) -> impl Bundle
 where
-    E: Event,
+    E: EntityEvent,
     B: Bundle,
     I: IntoObserverSystem<E, B, M>,
 {

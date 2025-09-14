@@ -1,8 +1,6 @@
 //! The credits menu.
 
-use bevy::{
-    ecs::spawn::SpawnIter, input::common_conditions::input_just_pressed, prelude::*, ui::Val::*,
-};
+use bevy::{ecs::spawn::SpawnIter, input::common_conditions::input_just_pressed, prelude::*};
 
 use crate::{asset_tracking::LoadResource, audio::music, menus::Menu, theme::prelude::*};
 
@@ -13,7 +11,6 @@ pub(super) fn plugin(app: &mut App) {
         go_back.run_if(in_state(Menu::Credits).and(input_just_pressed(KeyCode::Escape))),
     );
 
-    app.register_type::<CreditsAssets>();
     app.load_resource::<CreditsAssets>();
     app.add_systems(OnEnter(Menu::Credits), start_credits_music);
 }
@@ -22,7 +19,7 @@ fn spawn_credits_menu(mut commands: Commands) {
     commands.spawn((
         widget::ui_root("Credits Menu"),
         GlobalZIndex(2),
-        StateScoped(Menu::Credits),
+        DespawnOnExit(Menu::Credits),
         children![
             widget::header("Created by"),
             created_by(),
@@ -57,8 +54,8 @@ fn grid(content: Vec<[&'static str; 2]>) -> impl Bundle {
         Name::new("Grid"),
         Node {
             display: Display::Grid,
-            row_gap: Px(10.0),
-            column_gap: Px(30.0),
+            row_gap: px(10),
+            column_gap: px(30),
             grid_template_columns: RepeatedGridTrack::px(2, 400.0),
             ..default()
         },
@@ -80,7 +77,7 @@ fn grid(content: Vec<[&'static str; 2]>) -> impl Bundle {
     )
 }
 
-fn go_back_on_click(_: Trigger<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
+fn go_back_on_click(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
     next_menu.set(Menu::Main);
 }
 
@@ -107,7 +104,7 @@ impl FromWorld for CreditsAssets {
 fn start_credits_music(mut commands: Commands, credits_music: Res<CreditsAssets>) {
     commands.spawn((
         Name::new("Credits Music"),
-        StateScoped(Menu::Credits),
+        DespawnOnExit(Menu::Credits),
         music(credits_music.music.clone()),
     ));
 }

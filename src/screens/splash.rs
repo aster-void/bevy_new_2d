@@ -24,7 +24,6 @@ pub(super) fn plugin(app: &mut App) {
     );
 
     // Add splash timer.
-    app.register_type::<SplashTimer>();
     app.add_systems(OnEnter(Screen::Splash), insert_splash_timer);
     app.add_systems(OnExit(Screen::Splash), remove_splash_timer);
     app.add_systems(
@@ -52,12 +51,12 @@ fn spawn_splash_screen(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
         widget::ui_root("Splash Screen"),
         BackgroundColor(SPLASH_BACKGROUND_COLOR),
-        StateScoped(Screen::Splash),
+        DespawnOnExit(Screen::Splash),
         children![(
             Name::new("Splash image"),
             Node {
                 margin: UiRect::all(Val::Auto),
-                width: Val::Percent(70.0),
+                width: percent(70),
                 ..default()
             },
             ImageNode::new(asset_server.load_with_settings(
